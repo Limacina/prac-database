@@ -18,24 +18,35 @@ class Job:
         self.tables = []
         for i in self.cur.fetchall():
             self.tables.append(i[0].strip())
-
         self.last_time = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
 
     def work(self):
         new_time = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         for table in self.tables:
-            self.cur.execute("select rdb$field_name from rdb$relation_fields where rdb$relation_name = '" + table + "'")
+            self.cur.execute(
+                "select rdb$field_name from rdb$relation_fields where rdb$relation_name = '" +
+                table +
+                "'"
+            )
             columns = []
             for col in self.cur.fetchall():
                 columns.append(col[0].strip())
+
             if 'TIME' in columns:
                 self.cur.execute(
-                    "select * from " + table + " where 'TIME' between '" +
+                    "select * from " +
+                    table +
+                    """ where "TIME" between '""" +
                     self.last_time +
                     "' and '" +
                     new_time +
                     "'"
                 )
+
                 df = pandas.DataFrame(self.cur.fetchall(), columns=columns)
-                df.to_csv(table.lower() + '_' + self.last_time.replace(':', '_') + '.csv', index=False, encoding='utf-8')
+                df.to_csv(
+                    table.lower() + '_' + self.last_time.replace(':', '.').replace(' ', '_') + '.csv',
+                    index=False,
+                    encoding='utf-8'
+                )
         self.last_time = new_time
