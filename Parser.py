@@ -1,4 +1,6 @@
 from argparse import ArgumentParser
+from datetime import datetime
+
 
 def parse():
     parser = ArgumentParser(description='Database connection')
@@ -26,6 +28,7 @@ def parse():
     parser.add_argument(
         '--start',
         type=str,
+        default=datetime.today().strftime('%H:%M:%S'),
         help='time in format "hh:mm:ss" to start the program'
     )
 
