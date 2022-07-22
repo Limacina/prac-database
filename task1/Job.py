@@ -1,24 +1,32 @@
 from datetime import datetime
-from fdb import connect
+from fdb import connect, fbcore
+
 import pandas
 
 
 class Job:
     def __init__(self, database, user, pwd):
-        self.con = connect(
-            database,
-            user=user,
-            password=pwd,
-            charset='UTF8'
-        )
-        self.cur = self.con.cursor()
-        self.cur.execute(
-            'select a.RDB$RELATION_NAME from RDB$RELATIONS a where COALESCE(RDB$SYSTEM_FLAG, 0) = 0 and RDB$RELATION_TYPE = 0'
-        )
-        self.tables = []
-        for i in self.cur.fetchall():
-            self.tables.append(i[0].strip())
-        self.last_time = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+
+        try:
+            self.con = connect(
+                database,
+                user=user,
+                password=pwd,
+                charset='UTF8'
+            )
+            self.connected = True
+        except fbcore.DatabaseError:
+            print('Invalid credentials, cannot connect to the database')
+            self.connected = False
+        if self.connected:
+            self.cur = self.con.cursor()
+            self.cur.execute(
+                'select a.RDB$RELATION_NAME from RDB$RELATIONS a where COALESCE(RDB$SYSTEM_FLAG, 0) = 0 and RDB$RELATION_TYPE = 0'
+            )
+            self.tables = []
+            for i in self.cur.fetchall():
+                self.tables.append(i[0].strip())
+            self.last_time = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
 
     def work(self):
         new_time = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
