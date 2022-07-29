@@ -41,7 +41,7 @@ if con:
     plt.get_figure().savefig(args.output + '/fig_boxplot_' + args.itemid + '.pdf')
 
     plt = df.plot.line(x='TIME', y='VALUE')
-    plt.set_xlabel('Value')
-    plt.set_ylabel('Time')
+    plt.set_ylabel('Value')
+    plt.set_xlabel('Time')
     plt.set_title(name)
     plt.get_figure().savefig(args.output + '/fig_line_' + args.itemid + '.pdf')

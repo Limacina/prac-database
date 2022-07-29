@@ -20,7 +20,7 @@ def parse():
     )
     parser.add_argument(
         '--itemid',
-        type=int,
+        type=str,
         help='item id to check the values'
     )
     parser.add_argument(

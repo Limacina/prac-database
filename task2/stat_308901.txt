@@ -1,5 +1,0 @@
-Item name: ÑÑÄ.InSAT Modbus OPC Server DA.Node1.RS4M.T
-Values vary from 277.6873474121094 to 286.4774475097656
-Mean: 279.69395480483564
-Median: 279.60333251953125
-Standard Deviation: 1.4433749682186547
